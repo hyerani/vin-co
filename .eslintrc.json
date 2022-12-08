@@ -4,10 +4,10 @@
     "es2021": true
   },
   "extends": [
-    "prettier",
-    "react/recommended",
-    "eslint:recommended",
     "airbnb",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "prettier",
     "plugin:prettier/recommended"
   ],
   "overrides": [],
@@ -22,7 +22,7 @@
     "react/jsx-props-no-spreading": ["warn"],
     "react/function-component-definition": [
       2,
-      { "namedcomponents": "arrow-function" }
+      { "namedComponents": "arrow-function" }
     ],
     "no-shadow": "off"
   }
