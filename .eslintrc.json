@@ -4,7 +4,8 @@
     "es2021": true
   },
   "extends": [
-    "prettier/react",
+    "prettier",
+    "react/recommended",
     "eslint:recommended",
     "airbnb",
     "plugin:prettier/recommended"
