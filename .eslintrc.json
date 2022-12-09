@@ -24,6 +24,7 @@
       2,
       { "namedComponents": "arrow-function" }
     ],
-    "no-shadow": "off"
+    "no-shadow": "off",
+    "import/prefer-default-export": "off"
   }
 }
