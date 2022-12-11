@@ -2,9 +2,10 @@ import styled from "styled-components";
 import { containerStyle } from "../../styles/styleConstants";
 
 const StyledFooter = styled.footer`
+  margin-top: 6.25rem;
   border-top: 1px #e5e7eb solid;
   width: 100%;
-  position: absolute;
+  /* position: absolute; */
   bottom: 0;
   padding: 0.5rem 0;
 `;
