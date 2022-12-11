@@ -3,6 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { instance } from "../../api/api";
+import { Container } from "./style";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -65,7 +66,7 @@ const Signup = () => {
 
   return (
     <section>
-      <div>
+      <Container>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input type="file" {...register("profileImg")} />
           <input type="text" placeholder="이메일" {...register("email")} />
@@ -92,7 +93,7 @@ const Signup = () => {
 
           <input type="submit" value="가입하기" />
         </form>
-      </div>
+      </Container>
     </section>
   );
 };

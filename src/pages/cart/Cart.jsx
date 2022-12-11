@@ -1,16 +1,17 @@
 import "./Cart.css";
+import { MdOutlineShoppingCart } from "react-icons/md";
+import { Link } from "react-router-dom";
 
-const moveMain = () => {
-  document.location.href = "/";
-};
+import styled from "styled-components";
+
+const Container = styled.div`
+  max-width: 1024px;
+  margin-inline: auto;
+`;
 
 const Cart = () => {
   return (
-    <div>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"
-      />
+    <Container>
       <h2 className="Carth2">
         장바구니<span className="itemSize">0</span>
       </h2>
@@ -23,15 +24,20 @@ const Cart = () => {
           <div className="postInfo">배송정보</div>
         </div>
         <div className="emptyTD">
-          <span className="material-symbols-outlined">shopping_cart</span>
+          <MdOutlineShoppingCart
+            style={{
+              fontSize: "3.125rem",
+              marginBottom: "1rem",
+            }}
+          />
           <div>장바구니가 비어있습니다.</div>
         </div>
       </div>
 
-      <button className="home" type="button" onClick={moveMain}>
-        계속 쇼핑하기
+      <button className="home" type="button">
+        <Link to="/">계속 쇼핑하기</Link>
       </button>
-    </div>
+    </Container>
   );
 };
 export default Cart;

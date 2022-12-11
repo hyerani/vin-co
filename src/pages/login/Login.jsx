@@ -39,7 +39,12 @@ const Login = () => {
   };
 
   return (
-    <section>
+    <section
+      style={{
+        padding: "1rem 0.75rem",
+        marginTop: "130px",
+      }}
+    >
       <Container>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <input type="text" placeholder="이메일" {...register("email")} />
@@ -50,11 +55,12 @@ const Login = () => {
             {...register("password")}
           />
           <p>{errors.password?.message}</p>
-          <input type="submit" value="로그인" />
+          <button type="submit">로그인</button>
         </Form>
-        <Link to="/signup">
-          <button type="button">회원가입</button>
-        </Link>
+
+        <button type="button">
+          <Link to="/signup">회원가입 </Link>
+        </button>
       </Container>
     </section>
   );
