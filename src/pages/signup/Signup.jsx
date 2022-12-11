@@ -2,8 +2,9 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
+import { MdOutlineCameraAlt } from "react-icons/md";
 import { instance } from "../../api/api";
-import { Container } from "./style";
+import { Container, StyledForm, UploaderWrapper } from "./style";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -65,10 +66,22 @@ const Signup = () => {
   };
 
   return (
-    <section>
+    <section
+      style={{
+        margin: "80px 0",
+      }}
+    >
       <Container>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <input type="file" {...register("profileImg")} />
+        <StyledForm onSubmit={handleSubmit(onSubmit)}>
+          <UploaderWrapper>
+            <label className="img-uploader">
+              <div className="profile" />
+              <span className="icon-wrapper">
+                <MdOutlineCameraAlt />
+              </span>
+              <input type="file" {...register("profileImg")} />
+            </label>
+          </UploaderWrapper>
           <input type="text" placeholder="이메일" {...register("email")} />
           <input
             type="password"
@@ -81,7 +94,7 @@ const Signup = () => {
             {...register("confirmPassword")}
           />
 
-          <div>
+          <div className="username-wrapper">
             <label htmlFor="username">이름</label>
             <input
               type="text"
@@ -91,8 +104,8 @@ const Signup = () => {
             />
           </div>
 
-          <input type="submit" value="가입하기" />
-        </form>
+          <button type="submit">가입하기</button>
+        </StyledForm>
       </Container>
     </section>
   );
