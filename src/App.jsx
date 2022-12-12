@@ -1,4 +1,6 @@
 import { Routes, Route } from "react-router-dom";
+
+import Cart from "./pages/cart/Cart";
 import Layout from "./componets/Layout";
 import NotFound from "./pages/404/NotFound";
 import Home from "./pages/home/Home";
@@ -17,7 +19,7 @@ const App = () => {
           <Route path="/account" element={<Account />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/cart" element={<Home />} />
+          <Route path="/cart" element={<Cart />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

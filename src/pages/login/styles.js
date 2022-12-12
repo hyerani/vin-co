@@ -3,17 +3,13 @@ import { containerStyle } from "../../styles/styleConstants";
 
 const Container = styled.div`
   ${containerStyle}
-  display: grid;
-  place-items: center;
-  padding: 0.75rem 1rem;
+  max-width: 600px;
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+  margin-bottom: 1rem;
   input[type="text"],
   input[type="password"] {
     padding: 0.75rem 1rem;
@@ -26,13 +22,11 @@ const Form = styled.form`
     margin-bottom: 1rem;
   }
 
-  input[type="submit"] {
+  button {
     padding: 0.75rem 1rem;
     background-color: transparent;
-    outline: none;
-    border: none;
-    cursor: pointer;
     border: 1px solid #27397d;
+    width: 100%;
   }
 `;
 
