@@ -18,7 +18,7 @@ const DeleteAccount = ({ setConfirmModal }) => {
     return () => {
       document.removeEventListener("mousedown", handler);
     };
-  });
+  }, []);
 
   return (
     <Container>
