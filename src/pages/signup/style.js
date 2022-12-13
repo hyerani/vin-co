@@ -83,7 +83,10 @@ const UploaderWrapper = styled.div`
     }
 
     .profile {
-      background: url(https://www.savoric.com/wp-content/uploads/2018/03/profil-pic_dummy.png)
+      background: ${({ profilePreview }) =>
+          profilePreview
+            ? `url(${profilePreview})`
+            : "url(https://www.savoric.com/wp-content/uploads/2018/03/profil-pic_dummy.png)"}
         50% 50% / cover no-repeat;
       width: 100%;
       height: 100%;
