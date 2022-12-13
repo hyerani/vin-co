@@ -23,8 +23,10 @@ const Container = styled.div`
     padding: 10% 0;
   }
 
-  .user-icon {
-    font-size: 6rem;
+  .user-icon img {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
     cursor: pointer;
   }
 

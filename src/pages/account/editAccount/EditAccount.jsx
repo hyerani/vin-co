@@ -1,15 +1,19 @@
 import { AiOutlineClose } from "react-icons/ai";
-import { IoPersonCircleSharp } from "react-icons/io5";
 import { MdOutlineCameraAlt } from "react-icons/md";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Container, UserForm } from "./styles";
+import { instance } from "../../../api/api";
 
-const EditAccount = ({ setModalOpen }) => {
+const EditAccount = ({ setModalOpen, userData }) => {
+  const modalRef = useRef(HTMLDivElement);
+  const [displayName, setDisplayName] = useState(userData.displayName);
+  const [newPassword, setNewPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  console.log(userData);
+
   const closeModal = () => {
     setModalOpen(false);
   };
-
-  const modalRef = useRef(HTMLDivElement);
 
   useEffect(() => {
     const handler = (event) => {
@@ -23,6 +27,42 @@ const EditAccount = ({ setModalOpen }) => {
     };
   });
 
+  const editAccount = async () => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const res = await instance.request("/auth/user", {
+        method: "put",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          displayName,
+          newPassword,
+          oldPassword,
+        },
+      });
+
+      if (res.status === 200) {
+        console.log(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const displayNameHandler = (event) => {
+    setDisplayName(event.target.value);
+  };
+
+  const newPasswordHandler = (event) => {
+    setNewPassword(event.target.value);
+  };
+
+  const oldPasswordHandler = (event) => {
+    setOldPassword(event.target.value);
+  };
+
   return (
     <Container>
       <div ref={modalRef} className="modal">
@@ -34,7 +74,10 @@ const EditAccount = ({ setModalOpen }) => {
         </div>
         <label className="modal-profile">
           <div className="profile">
-            <IoPersonCircleSharp color="lightgray" />
+            <img
+              src="https://www.savoric.com/wp-content/uploads/2018/03/profil-pic_dummy.png"
+              alt="profile-img"
+            />
           </div>
           <span className="camera">
             <MdOutlineCameraAlt />
@@ -42,22 +85,33 @@ const EditAccount = ({ setModalOpen }) => {
           <input type="file" />
         </label>
         <UserForm>
-          <input type="text" placeholder="email" disabled="true" />
+          <input type="text" placeholder={userData.email} disabled />
           <input
             className="user-password"
             type="password"
-            placeholder="password"
+            placeholder="기존 비밀번호를 입력하세요"
+            value={oldPassword}
+            onChange={oldPasswordHandler}
           />
           <input
             type="password"
             placeholder="비밀번호를 변경 하는 경우 입력하세요"
+            value={newPassword}
+            onChange={newPasswordHandler}
           />
           <input type="password" placeholder="비밀번호 확인" />
           <div className="user-name">
             <span>이름</span>
-            <input type="text" placeholder="이름을(를) 입력하세요" />
+            <input
+              type="text"
+              placeholder="이름을(를) 입력하세요"
+              value={displayName}
+              onChange={displayNameHandler}
+            />
           </div>
-          <button type="button">확인</button>
+          <button type="button" onClick={editAccount}>
+            확인
+          </button>
         </UserForm>
       </div>
     </Container>

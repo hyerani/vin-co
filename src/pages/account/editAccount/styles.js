@@ -37,8 +37,8 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 25%;
     cursor: pointer;
+    margin-top: 7%;
     input[type="file"] {
       width: 0;
       height: 0;
@@ -48,9 +48,10 @@ const Container = styled.div`
     }
   }
 
-  .profile {
-    position: absolute;
-    font-size: 6em;
+  .profile img {
+    width: 5.5rem;
+    height: 5.5rem;
+    border-radius: 50%;
   }
 
   .camera {
@@ -60,8 +61,8 @@ const Container = styled.div`
     border-radius: 50%;
     font-size: 1.2em;
     position: absolute;
-    right: 36%;
-    margin-top: 7%;
+    right: 35%;
+    margin-top: 14%;
     svg {
       color: white;
       position: absolute;
@@ -74,7 +75,7 @@ const Container = styled.div`
 const UserForm = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 17%;
+  margin-top: 7%;
 
   .user-password {
     background-color: #e7f0fe;
