@@ -7,5 +7,5 @@ export const instance = axios.create({
     apiKey: process.env.REACT_APP_API_KEY,
     username: process.env.REACT_APP_USER_NAME,
   },
-  timeout: 1000,
+  // timeout: 1000,
 });

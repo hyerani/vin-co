@@ -12,6 +12,7 @@ const StyledHeader = styled.header`
   width: 100%;
   height: 64px;
   background-color: transparent;
+  z-index: 10;
 `;
 
 const Container = styled.div`
@@ -73,10 +74,16 @@ const Container = styled.div`
       ${hoverEffect}
     }
 
-    button {
+    .search-btn {
       ${buttonSize}
       transform: translateY(2px);
       font-size: 1.25rem;
+    }
+
+    .logout-btn {
+      ${hoverEffect}
+      font-size: 1.25rem;
+      color: #27397d;
     }
   }
 `;

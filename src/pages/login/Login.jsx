@@ -7,7 +7,7 @@ import { instance } from "../../api/api";
 
 const Login = () => {
   const navigate = useNavigate();
-  const shcema = yup.object().shape({
+  const schema = yup.object().shape({
     email: yup.string().required("이메일을 입력해주세요"),
     password: yup.string().min(8).required("비밀번호를 입력해주세요"),
   });
@@ -17,20 +17,27 @@ const Login = () => {
     register,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(shcema),
+    resolver: yupResolver(schema),
   });
 
   const onSubmit = async (data) => {
+    const token = localStorage.getItem("token");
+
     try {
       const res = await instance.request("/auth/login", {
         method: "post",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         data: {
           ...data,
         },
       });
-      console.log(res);
-      console.log(res.data);
+
+      const { displayName, email, profileImg } = res.data;
+
       if (res.status === 200) {
+        localStorage.setItem("token", res.data.accessToken);
         navigate("/");
       }
     } catch (error) {
