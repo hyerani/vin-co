@@ -1,7 +1,3 @@
-import "./Cart.css";
-import { MdOutlineShoppingCart } from "react-icons/md";
-import { Link } from "react-router-dom";
-
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -9,34 +5,83 @@ const Container = styled.div`
   margin-inline: auto;
 `;
 
+const Item3 = [
+  {
+    name: "Polaroid SX-70 Land Camera",
+    price: 80000,
+    number: 1,
+    photo: "https://cdn.imweb.me/thumbnail/20220207/0bef11156dcdb.jpg",
+  },
+  {
+    name: "Le Corbusier LC2 Chair",
+    price: 960000,
+    number: 2,
+    photo: "https://cdn.imweb.me/thumbnail/20220207/6c05fee561509.jpg",
+  },
+  {
+    name: "Vintage Mini Televison",
+    price: 154000,
+    number: 3,
+    photo: "https://cdn.imweb.me/thumbnail/20220207/85ea9b194b0c1.jpg",
+  },
+];
+localStorage.item = JSON.stringify(Item3);
+
+const bag = (
+  <div>
+    장바구니 <span>{Item3.length}</span>
+  </div>
+);
+
+const table1Title = (
+  <div>
+    <div>
+      {Item3 ? <input type="checkbox" /> : <span> </span>}
+      <div>상품 정보</div>
+    </div>
+    <div>수량</div>
+    <div>주문금액</div>
+    <div>배송 정보</div>
+  </div>
+);
+
 const Cart = () => {
   return (
     <Container>
-      <h2 className="Carth2">
-        장바구니<span className="itemSize">0</span>
-      </h2>
-
-      <div className="table">
-        <div className="th">
-          <div className="itemName">상품 이름</div>
-          <div className="th-itemSize">수량</div>
-          <div className="itemMoney">주문금액</div>
-          <div className="postInfo">배송정보</div>
-        </div>
-        <div className="emptyTD">
-          <MdOutlineShoppingCart
-            style={{
-              fontSize: "3.125rem",
-              marginBottom: "1rem",
-            }}
-          />
-          <div>장바구니가 비어있습니다.</div>
-        </div>
-      </div>
-
-      <button className="home" type="button">
-        <Link to="/">계속 쇼핑하기</Link>
-      </button>
+      {bag}
+      {table1Title}
+      {Item3 ? (
+        Item3.map((x) => {
+          return (
+            <div key={Item3.indexOf(x)}>
+              <div>
+                <input type="checkbox" />
+                <div>
+                  <img src={x.photo} alt={x.name} />
+                  <div>{x.name}</div>
+                  <button type="button">x</button>
+                </div>
+              </div>
+              <div>
+                <div>{x.number}</div>
+                <button type="button">옵션/수량 버튼</button>
+              </div>
+              <div>
+                <div>{x.price}.toLocaleString()원</div>
+                <button type="button">바로 구매</button>
+              </div>
+              <div>
+                <div>
+                  무료<span>?</span>
+                </div>
+                <div>택배</div>
+              </div>
+            </div>
+          );
+        })
+      ) : (
+        <div>장바구니가 비어있습니다.</div>
+      )}
     </Container>
   );
 };
