@@ -33,7 +33,6 @@
       {
         "labelAttributes": ["htmlFor"]
       }
-    ],
-    "aallowTernary": true
+    ]
   }
 }
