@@ -1,38 +1,93 @@
 import { Link } from "react-router-dom";
-import { MdMenu, MdSearch } from "react-icons/md";
-import { useEffect, useState } from "react";
-import { Container, StyledHeader } from "./styles";
+import { MdClose, MdMenu, MdSearch } from "react-icons/md";
+import { IoEllipsisVerticalOutline } from "react-icons/io5";
+import { BsChevronDown } from "react-icons/bs";
+import { useContext } from "react";
+import { CloseBtn, Container, StyledAside, StyledHeader } from "./styles";
 import { useToggle } from "../../hooks/useToggle";
 import { instance } from "../../api/api";
+import AuthContext from "../../context/ContextProvider";
+
+const Aside = ({ isToggle, toggle }) => {
+  return (
+    <StyledAside isToggle={isToggle}>
+      <div className="backdrop" />
+      <nav className={isToggle ? "mobile-menu slide" : "mobile-menu close"}>
+        <CloseBtn isToggle={isToggle} onClick={toggle}>
+          <MdClose
+            style={{
+              color: "white",
+              fontSize: "1.5rem",
+            }}
+          />
+        </CloseBtn>
+
+        <div
+          className="menu-user"
+          style={{
+            color: "white",
+          }}
+        >
+          <div className="user-wrapper">
+            <div>
+              <p className="user">관리자</p>
+              <p className="user-email">lorem@lorem.com</p>
+            </div>
+
+            <button type="button">
+              <IoEllipsisVerticalOutline
+                style={{
+                  color: "white",
+                }}
+              />
+            </button>
+          </div>
+        </div>
+
+        <ul
+          className="dropdown"
+          style={{
+            color: "white",
+          }}
+        >
+          <li>
+            <Link to="/shop">
+              SHOP
+              <button type="button">
+                <BsChevronDown />
+              </button>
+            </Link>
+          </li>
+          <li>
+            <Link to="/shop">
+              LOREM
+              <button type="button">
+                <BsChevronDown />
+              </button>
+            </Link>
+          </li>
+          <li>
+            <Link to="/shop">
+              ABOUT
+              <button type="button">
+                <BsChevronDown />
+              </button>
+            </Link>
+          </li>
+        </ul>
+      </nav>
+    </StyledAside>
+  );
+};
 
 const Header = () => {
   const [isToggle, toggle] = useToggle();
-  const [isLogin, setIsLogin] = useState(false);
+  // const [token, setToken] = useState(localStorage.getItem("token"));
 
-  useEffect(() => {
-    // const authValidate = async () => {
-    //   const token = localStorage.getItem("token");
-    //   try {
-    //     const res = await instance.request("/auth/me", {
-    //       method: "post",
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     });
-    //     const { data } = res;
-    //     if (res.status === 200) {
-    //       setIsLogin(true);
-    //       console.log(isLogin);
-    //     }
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // };
-    // authValidate();
-  }, [isLogin]);
+  const { token, setToken } = useContext(AuthContext);
+  console.log(token);
 
-  const logout = async () => {
-    const token = localStorage.getItem("token");
+  const logout = async (token) => {
     try {
       const res = await instance.request("/auth/logout", {
         method: "post",
@@ -41,9 +96,8 @@ const Header = () => {
         },
       });
 
-      // const { data } = res;
       if (res.status === 200) {
-        setIsLogin(false);
+        setToken(localStorage.removeItem("token"));
       }
     } catch (error) {
       console.log(error);
@@ -91,11 +145,17 @@ const Header = () => {
               <Link to="/account">Account</Link>
             </li>
             <li>
-              <button className="logout-btn" type="button" onClick={logout}>
-                Logout
-              </button>
-              <br />
-              <Link to="/login">Login</Link>
+              {token ? (
+                <button
+                  className="logout-btn"
+                  type="button"
+                  onClick={() => logout(token)}
+                >
+                  Logout
+                </button>
+              ) : (
+                <Link to="/login">Login</Link>
+              )}
             </li>
             <li>
               <Link to="/cart">Cart</Link>
@@ -103,6 +163,7 @@ const Header = () => {
           </ul>
         </nav>
       </Container>
+      <Aside isToggle={isToggle} toggle={toggle} />
     </StyledHeader>
   );
 };

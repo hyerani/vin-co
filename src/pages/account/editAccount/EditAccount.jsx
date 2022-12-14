@@ -5,11 +5,14 @@ import { Container, UserForm } from "./styles";
 import { instance } from "../../../api/api";
 
 const EditAccount = ({ setModalOpen, userData }) => {
+  // 리렌더링 계속 되는 버그 있음
+  // 아마 userData가 계속 fetch 되어서 발생하는 버그 같음..
+
+  console.log(userData);
   const modalRef = useRef(HTMLDivElement);
   const [displayName, setDisplayName] = useState(userData.displayName);
   const [newPassword, setNewPassword] = useState("");
   const [oldPassword, setOldPassword] = useState("");
-  console.log(userData);
 
   const closeModal = () => {
     setModalOpen(false);
@@ -44,7 +47,7 @@ const EditAccount = ({ setModalOpen, userData }) => {
       });
 
       if (res.status === 200) {
-        console.log(res.data);
+        setModalOpen(false);
       }
     } catch (error) {
       console.log(error);
@@ -65,6 +68,7 @@ const EditAccount = ({ setModalOpen, userData }) => {
 
   return (
     <Container>
+      <div className="test" />
       <div ref={modalRef} className="modal">
         <div className="modal-top">
           <div className="modal-title">정보 수정</div>
@@ -74,10 +78,7 @@ const EditAccount = ({ setModalOpen, userData }) => {
         </div>
         <label className="modal-profile">
           <div className="profile">
-            <img
-              src="https://www.savoric.com/wp-content/uploads/2018/03/profil-pic_dummy.png"
-              alt="profile-img"
-            />
+            <img src={userData.profileImg} alt="profile-img" />
           </div>
           <span className="camera">
             <MdOutlineCameraAlt />

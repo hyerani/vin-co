@@ -2,10 +2,14 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
+import { useContext } from "react";
 import { Container, Form } from "./styles";
 import { instance } from "../../api/api";
+import AuthContext from "../../context/ContextProvider";
 
 const Login = () => {
+  const { token, setToken } = useContext(AuthContext);
+
   const navigate = useNavigate();
   const schema = yup.object().shape({
     email: yup.string().required("이메일을 입력해주세요"),
@@ -21,23 +25,18 @@ const Login = () => {
   });
 
   const onSubmit = async (data) => {
-    const token = localStorage.getItem("token");
-
     try {
       const res = await instance.request("/auth/login", {
         method: "post",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
         data: {
           ...data,
         },
       });
-
-      const { displayName, email, profileImg } = res.data;
+      const { displayName, email, profileImg, accessToken } = res.data;
 
       if (res.status === 200) {
-        localStorage.setItem("token", res.data.accessToken);
+        localStorage.setItem("token", accessToken);
+        setToken(localStorage.getItem("token"));
         navigate("/");
       }
     } catch (error) {

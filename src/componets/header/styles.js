@@ -88,4 +88,100 @@ const Container = styled.div`
   }
 `;
 
-export { Container, StyledHeader };
+const StyledAside = styled.aside`
+  /* display: ${({ isToggle }) => (isToggle ? "block" : "none")}; */
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
+  width: ${({ isToggle }) => (isToggle ? "100%" : 0)};
+  z-index: 3;
+
+  /* @media screen and (min-width: 990px) {
+    width: 0;
+  } */
+
+  .backdrop {
+    width: ${({ isToggle }) => (isToggle ? "100%" : 0)};
+    background-color: #000;
+    opacity: 0.6;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    z-index: 2;
+  }
+
+  .mobile-menu {
+    position: relative;
+    background-color: #27397d;
+    height: 100%;
+    width: 0;
+    z-index: 4;
+    transition: width 0.3s ease;
+    padding: 1.5rem;
+    width: 250px;
+
+    @media screen and (max-width: 400px) {
+      width: 100%;
+    }
+
+    &.close {
+      width: 0;
+    }
+    /* &.close {
+      width: 0;
+    } */
+
+    /* @media screen and (min-width: 990px) {
+      width: 0;
+    } */
+    .user-wrapper {
+      display: flex;
+      justify-content: space-between;
+    }
+    .menu-user {
+      margin-bottom: 1rem;
+      svg {
+        font-size: 1.25rem;
+      }
+
+      .user {
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+      }
+
+      .user-email {
+        font-size: 0.75rem;
+        color: #d3d3d3;
+      }
+    }
+
+    .dropdown {
+      padding-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      font-size: 1.25rem;
+
+      a {
+        display: flex;
+        justify-content: space-between;
+        cursor: pointer;
+        color: #fff;
+        svg {
+          color: white;
+          font-size: 1.5rem;
+        }
+      }
+    }
+  }
+`;
+const CloseBtn = styled.button`
+  display: ${(isToggle) => (isToggle ? "block" : "none")};
+  position: absolute;
+  top: 27px;
+  right: -24px;
+`;
+
+export { Container, StyledHeader, StyledAside, CloseBtn };
