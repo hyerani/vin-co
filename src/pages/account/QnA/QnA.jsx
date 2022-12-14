@@ -5,6 +5,7 @@ const QnA = () => {
         <div className="title">1:1 문의게시판</div>
         <div className="count-num">0</div>
       </div>
+      <hr />
       <div className="detail">등록된 문의가 없습니다.</div>
     </>
   );
