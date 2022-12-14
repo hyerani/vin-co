@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Cart from "./pages/cart/Cart";
 import Layout from "./componets/Layout";
 import NotFound from "./pages/404/NotFound";
-import Home from "./pages/Home/Home";
+import Home from "./pages/Home/home";
 import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
 import Account from "./pages/account/Account";
