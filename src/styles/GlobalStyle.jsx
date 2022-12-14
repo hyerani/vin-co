@@ -4,7 +4,7 @@ import reset from "styled-reset";
 const GlobalStyle = createGlobalStyle`
   ${reset}
   html, body {
-    color:#27397d
+    color:#27397d;
   }
 
   body {
