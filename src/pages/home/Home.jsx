@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { instance } from "../../api/api";
 import {
   Container,
   Banner,
@@ -10,26 +12,45 @@ import {
   Name,
   Price,
 } from "./styles";
-import { instance } from "../../api/api";
 
-const Items = () => {
-  const name = "상품명";
-  const price = "상품가격";
-  const source =
-    "https://w7.pngwing.com/pngs/441/722/png-transparent-pikachu-thumbnail.png";
+const Items = ({ props }) => {
   return (
     <Item>
-      <Thum src={source} alt="상품이미지" />
+      <Thum src={props.thumbnail} alt="상품이미지" />
       <Info>
-        <Name>{name}</Name>
-        <Price>{price}</Price>
+        <Name>{props.title}</Name>
+        <Price>
+          {props.price
+            .toString()
+            .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}
+        </Price>
       </Info>
     </Item>
   );
 };
 
 const Home = () => {
-  const arr = ["A", "B", "C", "D"];
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await instance.request("/products", {
+          method: "get",
+          headers: {
+            masterKey: true,
+          },
+        });
+        if (res.status === 200) {
+          setData(res.data);
+          console.log(res.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <Container>
       <Banner>
@@ -40,12 +61,11 @@ const Home = () => {
         <Intro>당신이 찾는 골동품 모두 여기에!</Intro>
       </div>
       <List>
-        {arr.map((abc) => (
-          <Items key={abc} />
+        {data.map((api) => (
+          <Items key={api.id} props={api} />
         ))}
       </List>
     </Container>
   );
 };
-
 export default Home;
