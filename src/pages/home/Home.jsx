@@ -19,11 +19,7 @@ const Items = ({ props }) => {
       <Thum src={props.thumbnail} alt="상품이미지" />
       <Info>
         <Name>{props.title}</Name>
-        <Price>
-          {props.price
-            .toString()
-            .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}
-        </Price>
+        <Price>{props.price.toLocaleString()}</Price>
       </Info>
     </Item>
   );
