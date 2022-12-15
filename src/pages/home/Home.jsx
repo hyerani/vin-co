@@ -26,7 +26,7 @@ const Items = ({ props }) => {
 };
 
 const Home = () => {
-  const [data, setData] = useState([]);
+  const [products, setProducts] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,8 +37,8 @@ const Home = () => {
           },
         });
         if (res.status === 200) {
-          setData(res.data);
-          console.log(res.data);
+          setProducts(res.data);
+          console.log(res);
         }
       } catch (error) {
         console.log(error);
@@ -57,8 +57,8 @@ const Home = () => {
         <Intro>당신이 찾는 골동품 모두 여기에!</Intro>
       </div>
       <List>
-        {data.map((api) => (
-          <Items key={api.id} props={api} />
+        {products.map((product) => (
+          <Items key={product.id} props={product} />
         ))}
       </List>
     </Container>
