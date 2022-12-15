@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { ImCancelCircle } from "react-icons/im";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
-import { useState } from "react";
+import { useEffect } from "react";
 
 const Container = styled.div`
   max-width: 1024px;
@@ -35,22 +35,30 @@ localStorage.setItem(
     photo: "https://cdn.imweb.me/thumbnail/20220207/85ea9b194b0c1.jpg",
   }),
 );
+
+function bag1() {
+  if (document.querySelector("span.bag").textContent !== localStorage.length) {
+    document.querySelector("span.bag").textContent = localStorage.length;
+  }
+}
+
 const bag = (
-  // () => {
-  //   const [length, setlength] = useState(localStorage.length);
-  //   const Decrease = () => {
-  //     setlength((prevNumber) => prevNumber - 1);
-  //   };
-  //   return (
   <div>
-    장바구니 <span>{localStorage.length}</span>
+    장바구니 <span className="bag">{localStorage.length}</span>
   </div>
 );
-//   );
-// };
+
+function empty() {
+  if (localStorage.length === 0) {
+    document
+      .querySelector(".table1title")
+      .insertAdjacentHTML("afterend", "<div>장바구니가 비어있습니다.</div>");
+    document.querySelector(".table1title div input").remove();
+  }
+}
 
 const table1Title = (
-  <div>
+  <div className="table1title">
     <div>
       {localStorage ? <input type="checkbox" /> : <span> </span>}
       <div>상품 정보</div>
@@ -68,13 +76,14 @@ const arr = Array(localStorage.length)
     return i;
   });
 arr.map((x) => lo.push(JSON.parse(localStorage[x])));
-console.log(lo);
 
 const remove = (event) => {
   if (event.target.closest(".del")) {
     localStorage.removeItem(event.target.closest(".item").classList[1]);
     event.target.closest(".item").remove();
     lo.splice(`${event.target.closest(".item").classList[1]}`, 1);
+    bag1();
+    empty();
   }
 };
 
