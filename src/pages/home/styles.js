@@ -46,8 +46,10 @@ const List = styled.div`
   flex-flow: wrap; */
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-
   @media screen and (min-width: 990px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media screen and (min-width: 1280px) {
     grid-template-columns: repeat(4, 1fr);
   }
 `;
