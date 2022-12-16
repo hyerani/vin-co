@@ -1,6 +1,8 @@
 import styled from "styled-components";
+import { containerStyle } from "../../styles/styleConstants";
 
 const Container = styled.div`
+  ${containerStyle}
   display: flex;
   flex-direction: column;
   gap: 50px;
@@ -37,10 +39,17 @@ const Intro = styled.span`
 
 // 목록
 const List = styled.div`
-  width: 1440px;
+  /* width: 1280px;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-flow: wrap; */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  @media screen and (min-width: 990px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 `;
 
 // 아이템
