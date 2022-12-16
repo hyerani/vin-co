@@ -1,7 +1,5 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { ImCancelCircle } from "react-icons/im";
-import { AiOutlineQuestionCircle } from "react-icons/ai";
-import { useEffect } from "react";
 
 const Container = styled.div`
   max-width: 1024px;
@@ -9,126 +7,157 @@ const Container = styled.div`
 `;
 
 localStorage.setItem(
-  "0",
-  JSON.stringify({
-    name: "Polaroid SX-70 Land Camera",
-    price: 80000,
-    number: 1,
-    photo: "https://cdn.imweb.me/thumbnail/20220207/0bef11156dcdb.jpg",
-  }),
-);
-localStorage.setItem(
-  "1",
-  JSON.stringify({
-    name: "Le Corbusier LC2 Chair",
-    price: 960000,
-    number: 2,
-    photo: "https://cdn.imweb.me/thumbnail/20220207/6c05fee561509.jpg",
-  }),
-);
-localStorage.setItem(
-  "2",
-  JSON.stringify({
-    name: "Vintage Mini Televison",
-    price: 154000,
-    number: 3,
-    photo: "https://cdn.imweb.me/thumbnail/20220207/85ea9b194b0c1.jpg",
-  }),
-);
-
-function bag1() {
-  if (document.querySelector("span.bag").textContent !== localStorage.length) {
-    document.querySelector("span.bag").textContent = localStorage.length;
-  }
-}
-
-const bag = (
-  <div>
-    장바구니 <span className="bag">{localStorage.length}</span>
-  </div>
+  "item",
+  JSON.stringify([
+    {
+      name: "Polaroid SX-70 Land Camera",
+      price: 80000,
+      number: 1,
+      photo: "https://cdn.imweb.me/thumbnail/20220207/0bef11156dcdb.jpg",
+      id: 0,
+    },
+    {
+      name: "Le Corbusier LC2 Chair",
+      price: 960000,
+      number: 2,
+      photo: "https://cdn.imweb.me/thumbnail/20220207/6c05fee561509.jpg",
+      id: 1,
+    },
+    {
+      name: "Vintage Mini Televison",
+      price: 154000,
+      number: 3,
+      photo: "https://cdn.imweb.me/thumbnail/20220207/85ea9b194b0c1.jpg",
+      id: 2,
+    },
+    {
+      name: "Ocean Goblet",
+      price: 45000,
+      number: 1,
+      photo: "https://cdn.imweb.me/thumbnail/20220301/f672ab1fb0f0c.jpg",
+      id: 3,
+    },
+  ]),
 );
 
-function empty() {
-  if (localStorage.length === 0) {
-    document
-      .querySelector(".table1title")
-      .insertAdjacentHTML("afterend", "<div>장바구니가 비어있습니다.</div>");
-    document.querySelector(".table1title div input").remove();
-  }
-}
+const list = JSON.parse(localStorage.getItem("item"));
 
-const table1Title = (
-  <div className="table1title">
+const FreeDelivery = () => {
+  return (
     <div>
-      {localStorage ? <input type="checkbox" /> : <span> </span>}
-      <div>상품 정보</div>
+      <div>
+        무료
+        <span>
+          <button type="button">?</button>
+        </span>
+      </div>
+      <div>택배</div>
     </div>
-    <div>수량</div>
-    <div>주문금액</div>
-    <div>배송 정보</div>
-  </div>
-);
+  );
+};
 
-const lo = [];
-const arr = Array(localStorage.length)
-  .fill()
-  .map((arr, i) => {
-    return i;
-  });
-arr.map((x) => lo.push(JSON.parse(localStorage[x])));
-
-const remove = (event) => {
-  if (event.target.closest(".del")) {
-    localStorage.removeItem(event.target.closest(".item").classList[1]);
-    event.target.closest(".item").remove();
-    lo.splice(`${event.target.closest(".item").classList[1]}`, 1);
-    bag1();
-    empty();
-  }
+const Delivery = () => {
+  return (
+    <div>
+      <div>
+        2500원
+        <span>
+          <button type="button">?</button>
+        </span>
+      </div>
+      <div>택배</div>
+    </div>
+  );
 };
 
 const Cart = () => {
+  const [items, setItems] = useState(list);
+
+  const deleteHandler = (name) => {
+    setItems(items.filter((item) => item.name !== name));
+  };
+
+  useEffect(() => {
+    localStorage.setItem("item", JSON.stringify(items));
+  }, [items]);
+
+  const sumItems = items.reduce(
+    (acc, item) => acc + item.price * item.number,
+    0,
+  );
+
+  const [checkItems, setCheckItems] = useState([]);
+  const handleSingleCheck = (checked, id) => {
+    if (checked) {
+      setCheckItems((prevCheckItems) => [...prevCheckItems, id]);
+    } else {
+      setCheckItems(checkItems.filter((el) => el !== id));
+    }
+  };
+
+  const handleAllCheck = (checked) => {
+    if (checked) {
+      const idArray = [];
+      items.forEach((el) => idArray.push(el.id));
+      setCheckItems(idArray);
+    } else {
+      setCheckItems([]);
+    }
+  };
+
   return (
     <Container>
-      {bag}
-      {table1Title}
-      {localStorage ? (
-        lo.map((x) => {
-          return (
-            <div key={lo.indexOf(x)} className={`item ${lo.indexOf(x)}`}>
-              <div>
-                <input type="checkbox" />
-                <div>
-                  <img src={x.photo} alt={x.name} />
-                  <div>{x.name}</div>
-                  <button type="button" className="del" onClick={remove}>
-                    <ImCancelCircle />
-                  </button>
-                </div>
-              </div>
-              <div>
-                <div>{x.number}</div>
-                <button type="button">옵션/수량 버튼</button>
-              </div>
-              <div>
-                <div>{x.price.toLocaleString()}원</div>
-                <button type="button">바로 구매</button>
-              </div>
-              <div>
-                <div>
-                  무료
-                  <span>
-                    <AiOutlineQuestionCircle />
-                  </span>
-                </div>
-                <div>택배</div>
-              </div>
+      <div>
+        <div>
+          {" "}
+          장바구니 <span>{items.length > 0 && <div>{items.length}</div>}</span>
+        </div>
+        <div className="table1">
+          <div>
+            <div>
+              <input
+                type="checkbox"
+                name="select-all"
+                onChange={(e) => handleAllCheck(e.target.checked)}
+                checked={checkItems.length === items.length}
+              />
+              상품 정보
             </div>
-          );
-        })
-      ) : (
-        <div>장바구니가 비어있습니다.</div>
-      )}
+            <div>수량</div>
+            <div>주문금액</div>
+            <div>배송 정보</div>
+          </div>
+          <div> </div>
+        </div>
+      </div>
+      {items.length > 0 &&
+        items.map((item) => (
+          <div key={item.name}>
+            <div>
+              <input
+                type="checkbox"
+                name={`select-${item.id}`}
+                onChange={(e) => handleSingleCheck(e.target.checked, item.id)}
+                checked={!!checkItems.includes(item.id)}
+              />
+              <img src={item.photo} alt="상품 사진" />
+              <div>{item.name}</div>
+              <button onClick={() => deleteHandler(item.name)} type="button">
+                x
+              </button>
+            </div>
+            <div>
+              <div>{item.number}</div>
+              <button type="button">옵션/수량 변경</button>
+            </div>
+            <div>
+              <div>{item.price * item.number}</div>
+              <button type="button">바로구매</button>
+            </div>
+          </div>
+        ))}
+      {sumItems > 50000 ? <FreeDelivery /> : <Delivery />}
+      {items.length === 0 && <div>장바구니가 비어있습니다.</div>}
     </Container>
   );
 };
