@@ -15,7 +15,7 @@ import {
 
 const Items = ({ props }) => {
   return (
-    <Item>
+    <Item className="item">
       <Thum src={props.thumbnail} alt="상품이미지" />
       <Info>
         <Name>{props.title}</Name>

@@ -39,44 +39,43 @@ const Intro = styled.span`
 
 // 목록
 const List = styled.div`
-  /* width: 1280px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-flow: wrap; */
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
   @media screen and (min-width: 990px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  @media screen and (min-width: 1280px) {
     grid-template-columns: repeat(4, 1fr);
   }
 `;
 
 // 아이템
 const Item = styled.div`
-  width: 320px;
-  height: 360px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 40vw;
+  height: 50vw;
   gap: 10px;
-
+  @media screen and (min-width: 990px) {
+    width: 20vw;
+    height: 28vw;
+  }
   &:hover {
-    border-radius: 10px;
     background-color: whitesmoke;
   }
 `;
 
 const Thum = styled.img`
-  width: 280px;
-  height: 280px;
+  width: 40vw;
+  height: 40vw;
+  @media screen and (min-width: 990px) {
+    width: 20vw;
+    height: 20vw;
+  }
 `;
 
 const Info = styled.div`
   font-weight: 700;
-  width: 280px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 10px;
