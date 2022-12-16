@@ -67,8 +67,7 @@ const arr = Array(localStorage.length)
   .map((arr, i) => {
     return i;
   });
-arr.map((x) => lo.push(JSON.parse(localStorage[x])));
-console.log(lo);
+// arr.map((x) => lo.push(JSON.parse(localStorage[x])));
 
 const remove = (event) => {
   if (event.target.closest(".del")) {
