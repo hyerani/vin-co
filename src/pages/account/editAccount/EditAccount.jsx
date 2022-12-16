@@ -1,18 +1,17 @@
 import { AiOutlineClose } from "react-icons/ai";
 import { MdOutlineCameraAlt } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { Container, UserForm } from "./styles";
 import { instance } from "../../../api/api";
 
-const EditAccount = ({ setModalOpen, userData }) => {
-  // 리렌더링 계속 되는 버그 있음
-  // 아마 userData가 계속 fetch 되어서 발생하는 버그 같음..
-
-  console.log(userData);
+const EditAccount = ({ setModalOpen, userData, setUserData }) => {
   const modalRef = useRef(HTMLDivElement);
   const [displayName, setDisplayName] = useState(userData.displayName);
   const [newPassword, setNewPassword] = useState("");
   const [oldPassword, setOldPassword] = useState("");
+  const [profileImgBase64, setProfileImgBase64] = useState(userData.profileImg);
+  let profile = "";
 
   const closeModal = () => {
     setModalOpen(false);
@@ -30,9 +29,19 @@ const EditAccount = ({ setModalOpen, userData }) => {
     };
   });
 
+  const toBase64 = (profileImg) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(profileImg);
+    reader.addEventListener("load", (event) => {
+      const { result } = event.target;
+      setProfileImgBase64(result);
+    });
+  };
+
   const editAccount = async () => {
     const token = localStorage.getItem("token");
 
+    console.log(profileImgBase64);
     try {
       const res = await instance.request("/auth/user", {
         method: "put",
@@ -43,11 +52,13 @@ const EditAccount = ({ setModalOpen, userData }) => {
           displayName,
           newPassword,
           oldPassword,
+          profileImgBase64,
         },
       });
 
       if (res.status === 200) {
         setModalOpen(false);
+        setUserData(res.data);
       }
     } catch (error) {
       console.log(error);
@@ -66,9 +77,15 @@ const EditAccount = ({ setModalOpen, userData }) => {
     setOldPassword(event.target.value);
   };
 
+  const profileHandler = (event) => {
+    setProfileImgBase64(event.target.files);
+    profile = event.target.files;
+    toBase64(profile[0]);
+  };
+
   return (
     <Container>
-      <div className="test" />
+      <div className="backdrop" />
       <div ref={modalRef} className="modal">
         <div className="modal-top">
           <div className="modal-title">정보 수정</div>
@@ -78,12 +95,12 @@ const EditAccount = ({ setModalOpen, userData }) => {
         </div>
         <label className="modal-profile">
           <div className="profile">
-            <img src={userData.profileImg} alt="profile-img" />
+            <img src={profileImgBase64} alt="profile-img" />
           </div>
           <span className="camera">
             <MdOutlineCameraAlt />
           </span>
-          <input type="file" />
+          <input type="file" onChange={profileHandler} />
         </label>
         <UserForm>
           <input type="text" placeholder={userData.email} disabled />

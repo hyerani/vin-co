@@ -1,6 +1,17 @@
 import styled from "styled-components";
 
 const Container = styled.div`
+  .backdrop {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #000;
+    opacity: 0.7;
+    z-index: 10;
+  }
+
   .modal {
     position: absolute;
     bottom: 10%;
@@ -9,7 +20,6 @@ const Container = styled.div`
     height: 30rem;
     z-index: 999;
     background-color: white;
-    border: 1px solid black;
     border-radius: 3px;
     padding: 35px 20px;
   }
