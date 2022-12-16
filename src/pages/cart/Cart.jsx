@@ -1,44 +1,12 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import localStorage from "./LocalStorage";
+import ModalComponent from "./ModalComponent";
 
 const Container = styled.div`
   max-width: 1024px;
   margin-inline: auto;
 `;
-
-localStorage.setItem(
-  "item",
-  JSON.stringify([
-    {
-      name: "Polaroid SX-70 Land Camera",
-      price: 80000,
-      number: 1,
-      photo: "https://cdn.imweb.me/thumbnail/20220207/0bef11156dcdb.jpg",
-      id: 0,
-    },
-    {
-      name: "Le Corbusier LC2 Chair",
-      price: 960000,
-      number: 2,
-      photo: "https://cdn.imweb.me/thumbnail/20220207/6c05fee561509.jpg",
-      id: 1,
-    },
-    {
-      name: "Vintage Mini Televison",
-      price: 154000,
-      number: 3,
-      photo: "https://cdn.imweb.me/thumbnail/20220207/85ea9b194b0c1.jpg",
-      id: 2,
-    },
-    {
-      name: "Ocean Goblet",
-      price: 45000,
-      number: 1,
-      photo: "https://cdn.imweb.me/thumbnail/20220301/f672ab1fb0f0c.jpg",
-      id: 3,
-    },
-  ]),
-);
 
 const list = JSON.parse(localStorage.getItem("item"));
 
@@ -72,6 +40,7 @@ const Delivery = () => {
 
 const Cart = () => {
   const [items, setItems] = useState(list);
+  const [checkItems, setCheckItems] = useState([]);
 
   const deleteHandler = (name) => {
     setItems(items.filter((item) => item.name !== name));
@@ -86,30 +55,36 @@ const Cart = () => {
     0,
   );
 
-  const [checkItems, setCheckItems] = useState([]);
   const handleSingleCheck = (checked, id) => {
     if (checked) {
       setCheckItems((prevCheckItems) => [...prevCheckItems, id]);
     } else {
-      setCheckItems(checkItems.filter((el) => el !== id));
+      setCheckItems(checkItems.filter((checkItem) => checkItem !== id));
     }
   };
 
   const handleAllCheck = (checked) => {
     if (checked) {
       const idArray = [];
-      items.forEach((el) => idArray.push(el.id));
+      items.forEach((item) => idArray.push(item.id));
       setCheckItems(idArray);
     } else {
       setCheckItems([]);
     }
   };
 
+  // const [isOpen, setIsOpen] = useState(false);
+  // const [modalVisibleId, setModalVisibleId] = useState("");
+  // console.log(setModalVisibleId(id));
+
+  // const onModalHandler = (id) => {
+  //   setModalVisibleId(id);
+  // };
+
   return (
     <Container>
       <div>
         <div>
-          {" "}
           장바구니 <span>{items.length > 0 && <div>{items.length}</div>}</span>
         </div>
         <div className="table1">
@@ -148,7 +123,18 @@ const Cart = () => {
             </div>
             <div>
               <div>{item.number}</div>
-              <button type="button">옵션/수량 변경</button>
+              <button
+                type="button"
+                // onClick={() => onModalHandler(item.id)}
+              >
+                옵션/수량 변경
+              </button>
+              {/* <ModalComponent
+                item={item}
+                id={item.id}
+                modalVisibleId={modalVisibleId}
+                setModalVisibleId={setModalVisibleId}
+              /> */}
             </div>
             <div>
               <div>{item.price * item.number}</div>
