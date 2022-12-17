@@ -83,10 +83,7 @@ const Account = () => {
         <section>
           <div className="user">
             <button type="button" className="user-icon" onClick={showModal}>
-              <img
-                src="https://www.savoric.com/wp-content/uploads/2018/03/profil-pic_dummy.png"
-                alt="profile-img"
-              />
+              <img src={userData.profileImg} alt="profile-img" />
             </button>
             <div className="user-info">
               <h2>{userData.displayName} 님 안녕하세요.</h2>
@@ -100,7 +97,11 @@ const Account = () => {
         </section>
       </Container>
       {modalOpen && (
-        <EditAccount setModalOpen={setModalOpen} userData={userData} />
+        <EditAccount
+          setModalOpen={setModalOpen}
+          userData={userData}
+          setUserData={setUserData}
+        />
       )}
       {confirmModal && <DeleteAccount setConfirmModal={setConfirmModal} />}
     </>

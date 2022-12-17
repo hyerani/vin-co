@@ -21,8 +21,7 @@ const FreeDelivery = () => {
       </div>
       <div>택배</div>
     </div>
-  );
-};
+
 
 const Delivery = () => {
   return (
