@@ -1,125 +1,172 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { ImCancelCircle } from "react-icons/im";
-import { AiOutlineQuestionCircle } from "react-icons/ai";
-import { useState } from "react";
+import localStorage from "./LocalStorage";
+import ModalComponent from "./ModalComponent";
 
 const Container = styled.div`
   max-width: 1024px;
   margin-inline: auto;
 `;
 
-localStorage.setItem(
-  "0",
-  JSON.stringify({
-    name: "Polaroid SX-70 Land Camera",
-    price: 80000,
-    number: 1,
-    photo: "https://cdn.imweb.me/thumbnail/20220207/0bef11156dcdb.jpg",
-  }),
-);
-localStorage.setItem(
-  "1",
-  JSON.stringify({
-    name: "Le Corbusier LC2 Chair",
-    price: 960000,
-    number: 2,
-    photo: "https://cdn.imweb.me/thumbnail/20220207/6c05fee561509.jpg",
-  }),
-);
-localStorage.setItem(
-  "2",
-  JSON.stringify({
-    name: "Vintage Mini Televison",
-    price: 154000,
-    number: 3,
-    photo: "https://cdn.imweb.me/thumbnail/20220207/85ea9b194b0c1.jpg",
-  }),
-);
-const bag = (
-  // () => {
-  //   const [length, setlength] = useState(localStorage.length);
-  //   const Decrease = () => {
-  //     setlength((prevNumber) => prevNumber - 1);
-  //   };
-  //   return (
-  <div>
-    장바구니 <span>{localStorage.length}</span>
-  </div>
-);
-//   );
-// };
+const list = JSON.parse(localStorage.getItem("item"));
 
-const table1Title = (
-  <div>
+const FreeDelivery = () => {
+  return (
     <div>
-      {localStorage ? <input type="checkbox" /> : <span> </span>}
-      <div>상품 정보</div>
+      <div>
+        무료
+        <span>
+          <button type="button">?</button>
+        </span>
+      </div>
+      <div>택배</div>
     </div>
-    <div>수량</div>
-    <div>주문금액</div>
-    <div>배송 정보</div>
-  </div>
-);
+  );
+};
 
-const lo = [];
-const arr = Array(localStorage.length)
-  .fill()
-  .map((arr, i) => {
-    return i;
-  });
-arr.map((x) => lo.push(JSON.parse(localStorage[x])));
-console.log(lo);
-
-const remove = (event) => {
-  if (event.target.closest(".del")) {
-    localStorage.removeItem(event.target.closest(".item").classList[1]);
-    event.target.closest(".item").remove();
-    lo.splice(`${event.target.closest(".item").classList[1]}`, 1);
-  }
+const Delivery = () => {
+  return (
+    <div>
+      <div>
+        2500원
+        <span>
+          <button type="button">?</button>
+        </span>
+      </div>
+      <div>택배</div>
+    </div>
+  );
 };
 
 const Cart = () => {
+  const [items, setItems] = useState(list);
+  const [checkItems, setCheckItems] = useState([]);
+
+  const deleteHandler = (name) => {
+    setItems(items.filter((item) => item.name !== name));
+  };
+
+  useEffect(() => {
+    localStorage.setItem("item", JSON.stringify(items));
+  }, [items]);
+
+  const sumItems = items.reduce(
+    (acc, item) => acc + item.price * item.number,
+    0,
+  );
+
+  const handleSingleCheck = (checked, id) => {
+    if (checked) {
+      setCheckItems((prevCheckItems) => [...prevCheckItems, id]);
+    } else {
+      setCheckItems(checkItems.filter((checkItem) => checkItem !== id));
+    }
+  };
+
+  const handleAllCheck = (checked) => {
+    if (checked) {
+      const idArray = [];
+      items.forEach((item) => idArray.push(item.id));
+      setCheckItems(idArray);
+    } else {
+      setCheckItems([]);
+    }
+  };
+
+  const [modalVisibleId, setModalVisibleId] = useState("");
+
+  const onModalHandler = (id) => {
+    setModalVisibleId(id);
+  };
+
+  const getNumEqual = (id, numItem) => {
+    setItems(
+      items.map(
+        (item) => ({ ...item, number: item.id === id ? numItem : item.number }),
+        // (item) => (item.number = item.id === id ? numItem : item.number),
+      ),
+    );
+    // return (data.number = numItem);
+    // items.map((item) =>(
+    //   if (item.id === id) {
+    //     item.number = numItem;
+    //   }
+    // )),
+  };
+  // const numEqual = (itemNum, itemId) => {
+  //   setItems(items.map((item)=>{if(item.id === itemId){
+  //     item.number === itemNum
+  //     console.log(item)
+  //   }}))
+
   return (
     <Container>
-      {bag}
-      {table1Title}
-      {localStorage ? (
-        lo.map((x) => {
-          return (
-            <div key={lo.indexOf(x)} className={`item ${lo.indexOf(x)}`}>
-              <div>
-                <input type="checkbox" />
-                <div>
-                  <img src={x.photo} alt={x.name} />
-                  <div>{x.name}</div>
-                  <button type="button" className="del" onClick={remove}>
-                    <ImCancelCircle />
-                  </button>
-                </div>
-              </div>
-              <div>
-                <div>{x.number}</div>
-                <button type="button">옵션/수량 버튼</button>
-              </div>
-              <div>
-                <div>{x.price.toLocaleString()}원</div>
-                <button type="button">바로 구매</button>
-              </div>
-              <div>
-                <div>
-                  무료
-                  <span>
-                    <AiOutlineQuestionCircle />
-                  </span>
-                </div>
-                <div>택배</div>
-              </div>
+      <div>
+        <div>
+          장바구니 <span>{items.length > 0 && <div>{items.length}</div>}</span>
+        </div>
+        <div className="table1">
+          <div>
+            <div>
+              <input
+                type="checkbox"
+                name="select-all"
+                onChange={(e) => handleAllCheck(e.target.checked)}
+                checked={checkItems.length === items.length}
+              />
+              상품 정보
             </div>
-          );
-        })
-      ) : (
-        <div>장바구니가 비어있습니다.</div>
-      )}
+            <div>수량</div>
+            <div>주문금액</div>
+            <div>배송 정보</div>
+          </div>
+          <div> </div>
+        </div>
+      </div>
+      {items.length > 0 &&
+        items.map((item) => (
+          <div key={item.name}>
+            <div>
+              <input
+                type="checkbox"
+                name={`select-${item.id}`}
+                onChange={(e) => handleSingleCheck(e.target.checked, item.id)}
+                checked={!!checkItems.includes(item.id)}
+              />
+              <img src={item.photo} alt="상품 사진" />
+              <div>{item.name}</div>
+              <button onClick={() => deleteHandler(item.name)} type="button">
+                x
+              </button>
+            </div>
+            <div>
+              <div>{item.number}</div>
+              <button type="button" onClick={() => onModalHandler(item.id)}>
+                옵션/수량 변경
+              </button>
+              {modalVisibleId === item.id && (
+                <ModalComponent
+                  item={item}
+                  id={item.id}
+                  modalVisibleId={modalVisibleId}
+                  setModalVisibleId={setModalVisibleId}
+                  open={modalVisibleId}
+                  onClose={() => {
+                    setModalVisibleId("");
+                  }}
+                  getNumEqual={getNumEqual}
+                  // numEqual={numEqual}
+                />
+              )}
+            </div>
+            <div>
+              <div>{item.price * item.number}</div>
+              <button type="button">바로구매</button>
+            </div>
+          </div>
+        ))}
+      {sumItems > 50000 ? <FreeDelivery /> : <Delivery />}
+      {items.length === 0 && <div>장바구니가 비어있습니다.</div>}
     </Container>
   );
 };
