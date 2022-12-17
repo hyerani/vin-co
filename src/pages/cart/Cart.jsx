@@ -73,13 +73,31 @@ const Cart = () => {
     }
   };
 
-  // const [isOpen, setIsOpen] = useState(false);
-  // const [modalVisibleId, setModalVisibleId] = useState("");
-  // console.log(setModalVisibleId(id));
+  const [modalVisibleId, setModalVisibleId] = useState("");
 
-  // const onModalHandler = (id) => {
-  //   setModalVisibleId(id);
-  // };
+  const onModalHandler = (id) => {
+    setModalVisibleId(id);
+  };
+
+  const getNumEqual = (id, numItem) => {
+    setItems(
+      items.map(
+        (item) => ({ ...item, number: item.id === id ? numItem : item.number }),
+        // (item) => (item.number = item.id === id ? numItem : item.number),
+      ),
+    );
+    // return (data.number = numItem);
+    // items.map((item) =>(
+    //   if (item.id === id) {
+    //     item.number = numItem;
+    //   }
+    // )),
+  };
+  // const numEqual = (itemNum, itemId) => {
+  //   setItems(items.map((item)=>{if(item.id === itemId){
+  //     item.number === itemNum
+  //     console.log(item)
+  //   }}))
 
   return (
     <Container>
@@ -123,18 +141,23 @@ const Cart = () => {
             </div>
             <div>
               <div>{item.number}</div>
-              <button
-                type="button"
-                // onClick={() => onModalHandler(item.id)}
-              >
+              <button type="button" onClick={() => onModalHandler(item.id)}>
                 옵션/수량 변경
               </button>
-              {/* <ModalComponent
-                item={item}
-                id={item.id}
-                modalVisibleId={modalVisibleId}
-                setModalVisibleId={setModalVisibleId}
-              /> */}
+              {modalVisibleId === item.id && (
+                <ModalComponent
+                  item={item}
+                  id={item.id}
+                  modalVisibleId={modalVisibleId}
+                  setModalVisibleId={setModalVisibleId}
+                  open={modalVisibleId}
+                  onClose={() => {
+                    setModalVisibleId("");
+                  }}
+                  getNumEqual={getNumEqual}
+                  // numEqual={numEqual}
+                />
+              )}
             </div>
             <div>
               <div>{item.price * item.number}</div>
