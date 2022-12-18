@@ -22,6 +22,7 @@ const DeleteAccount = ({ setConfirmModal }) => {
 
   return (
     <Container>
+      <div className="backdrop" />
       <div ref={modalRef} className="delete">
         <div className="title">회원탈퇴</div>
         <span className="content">가입된 회원정보가 모두 삭제됩니다.</span>

@@ -1,6 +1,17 @@
 import styled from "styled-components";
 
 const Container = styled.div`
+  .backdrop {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #000;
+    opacity: 0.7;
+    z-index: 10;
+  }
+
   .delete {
     position: absolute;
     width: 35rem;
@@ -9,7 +20,6 @@ const Container = styled.div`
     top: 10%;
     background-color: white;
     z-index: 999;
-    border: 1px solid black;
     border-radius: 3px;
     span {
       margin: 0 4%;
