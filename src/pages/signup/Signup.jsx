@@ -37,6 +37,7 @@ const Signup = () => {
   });
 
   const onSubmit = async (data) => {
+    console.log(data);
     const { email, password, displayName, profileImg } = data;
     // const token = localStorage.getItem("token");
 
@@ -50,22 +51,22 @@ const Signup = () => {
     };
 
     toBase64(profileImg[0]);
+    console.log(profileImg[0]);
 
     try {
-      const res = await instance.request("/auth/signup", {
-        method: "post",
-        data: {
-          email,
-          password,
-          displayName,
-          profileImgBase64,
-        },
-      });
-
-      if (res.status === 200) {
-        localStorage.setItem("token", res.data.accessToken);
-        navigate("/");
-      }
+      // const res = await instance.request("/auth/signup", {
+      //   method: "post",
+      //   data: {
+      //     email,
+      //     password,
+      //     displayName,
+      //     profileImgBase64,
+      //   },
+      // });
+      // if (res.status === 200) {
+      //   localStorage.setItem("token", res.data.accessToken);
+      //   navigate("/");
+      // }
     } catch (error) {
       console.log(error.message);
     }

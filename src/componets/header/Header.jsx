@@ -85,7 +85,6 @@ const Header = () => {
   // const [token, setToken] = useState(localStorage.getItem("token"));
 
   const { token, setToken } = useContext(AuthContext);
-  console.log(token);
 
   const logout = async (token) => {
     try {
