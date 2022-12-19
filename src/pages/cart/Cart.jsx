@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import localStorage from "./LocalStorage";
 import ModalComponent from "./ModalComponent";
@@ -37,7 +38,8 @@ const FreeDelivery = () => {
       </div>
       <div>택배</div>
     </div>
-
+  );
+};
 
 const Delivery = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -116,25 +118,22 @@ const Cart = () => {
     );
   };
 
-  // console.log(checkItems);
-
-  // const deleteHandler = (name) => {
-  //   setItems(items.filter((item) => item.name !== name));
-  // };
-
-  // useEffect(() => {
-  //   localStorage.setItem("item", JSON.stringify(items));
-  // }, [items]);
-
   const checkDelete = (checkItems) => {
     setItems(items.filter((item) => !checkItems.includes(item.id)));
     handleAllCheck();
-    // setItems(checkItems.map((num) => items.filter((item) => item.id !== num)));
   };
 
   const noItem = () => {
     alert("품절된 상품이 없습니다.");
   };
+
+  const checkSumItems = (checkItems) => {
+    return items
+      .filter((item) => checkItems.includes(item.id))
+      .reduce((acc, item) => acc + item.price * item.number, 0);
+  };
+
+  const checkSum = checkSumItems(checkItems);
 
   return (
     <Container>
@@ -221,22 +220,38 @@ const Cart = () => {
           <div>총 주문 상품 {checkItems.length}</div>
           <div>
             <div>
-              <div></div>
+              <div>{checkSum}</div>
               <div>상품금액</div>
             </div>
             <div>+</div>
             <div>
-              <div></div>
+              <div>
+                {(checkSum >= 50000 || checkSum === 0) && 0}
+                {checkSum < 50000 && checkSum > 0 && 2500}
+              </div>
               <div>배송비</div>
             </div>
             <div>=</div>
             <div>
-              <div></div>
+              <div>
+                {(checkSum >= 50000 || checkSum === 0) && checkSum}
+                {checkSum < 50000 && checkSum > 0 && checkSum + 2500}
+              </div>
               <div>총 주문금액</div>
             </div>
           </div>
         </div>
       )}
+      {items.length > 0 && (
+        <div>
+          <button type="button">주문하기</button>
+        </div>
+      )}
+      <div>
+        <button type="button">
+          <Link to="/">계속 쇼핑하기</Link>
+        </button>
+      </div>
     </Container>
   );
 };
