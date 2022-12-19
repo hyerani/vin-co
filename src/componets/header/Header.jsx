@@ -139,7 +139,11 @@ const Header = () => {
           </button>
           <div className="searchBox">
             <input type="text" placeholder="검색" onKeyDown={keyDown} />
-            <MdSearch className="searchBtn" />
+            <Link to="/search">
+              <button type="button" onClick={searchToggle}>
+                <MdSearch className="searchBtn" />
+              </button>
+            </Link>
           </div>
         </Search>
       ) : (
