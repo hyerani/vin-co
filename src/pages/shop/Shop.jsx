@@ -44,7 +44,6 @@ const Shop = () => {
     } else {
       setTags(event.target.getAttribute("value"));
     }
-    fetchData();
   };
 
   useEffect(() => {
