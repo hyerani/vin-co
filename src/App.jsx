@@ -4,6 +4,7 @@ import Cart from "./pages/cart/Cart";
 import Layout from "./componets/Layout";
 import NotFound from "./pages/404/NotFound";
 import Home from "./pages/home/Home";
+import Shop from "./pages/shop/Shop";
 import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
 import Account from "./pages/account/Account";
@@ -18,7 +19,7 @@ const App = () => {
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
-            <Route path="/shop" element={<Home />} />
+            <Route path="/shop" element={<Shop />} />
             <Route path="/about" element={<Home />} />
             <Route
               path="/account"

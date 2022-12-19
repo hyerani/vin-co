@@ -1,29 +1,7 @@
 import { useEffect, useState } from "react";
 import { instance } from "../../api/api";
-import {
-  Container,
-  Banner,
-  Intro,
-  List,
-  Logo,
-  Item,
-  Thum,
-  Info,
-  Name,
-  Price,
-} from "./styles";
-
-const Items = ({ props }) => {
-  return (
-    <Item>
-      <Thum src={props.thumbnail} alt="상품이미지" />
-      <Info>
-        <Name>{props.title}</Name>
-        <Price>{props.price.toLocaleString()}</Price>
-      </Info>
-    </Item>
-  );
-};
+import { Container, Banner, Intro, List, Logo } from "./styles";
+import Items from "../shop/items/Items";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
