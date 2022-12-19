@@ -17,6 +17,7 @@ const Category = styled.div`
   align-items: center;
   justify-content: space-around;
   font-size: 14px;
+  cursor: pointer;
   @media screen and (min-width: 990px) {
     font-size: 22px;
     display: block;
