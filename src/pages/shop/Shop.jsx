@@ -49,7 +49,7 @@ const Shop = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [tags]);
 
   return (
     <Container>
