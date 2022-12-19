@@ -7,7 +7,6 @@ const ModalComponent = ({
   modalVisbleId,
   setModalVisibleId,
   getNumEqual,
-  // numEqual,
 }) => {
   const onCloseHandler = () => {
     setModalVisibleId("");
