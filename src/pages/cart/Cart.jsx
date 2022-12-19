@@ -37,8 +37,7 @@ const FreeDelivery = () => {
       </div>
       <div>택배</div>
     </div>
-  );
-};
+
 
 const Delivery = () => {
   const [isOpen, setIsOpen] = useState(false);
