@@ -184,4 +184,59 @@ const CloseBtn = styled.button`
   right: -24px;
 `;
 
-export { Container, StyledHeader, StyledAside, CloseBtn };
+const Search = styled.div`
+  position: absolute;
+  background-color: white;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .closeBtn {
+    font-size: 30px;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    @media screen and (min-width: 765px) {
+      font-size: 50px;
+    }
+  }
+  .searchBox {
+    width: 90%;
+    height: 30px;
+    border-bottom: 1px solid #27397d;
+    position: absolute;
+    top: 210px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    @media screen and (min-width: 765px) {
+      top: 200px;
+      height: 60px;
+      width: 80%;
+      max-width: 740px;
+    }
+    input {
+      color: #27397d;
+
+      font-size: 18px;
+      width: 90%;
+      border: none;
+      @media screen and (min-width: 765px) {
+        font-size: 25px;
+      }
+    }
+    input:focus {
+      outline: none;
+    }
+    .searchBtn {
+      font-size: 24px;
+      @media screen and (min-width: 765px) {
+        font-size: 36px;
+      }
+    }
+  }
+`;
+
+export { Container, StyledHeader, StyledAside, CloseBtn, Search };
