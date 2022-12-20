@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { ImCancelCircle } from "react-icons/im";
 import styled from "styled-components";
 import localStorage from "./LocalStorage";
 import ModalComponent from "./ModalComponent";
@@ -140,10 +141,12 @@ const Cart = () => {
       <div>
         <div>
           <div>
-            장바구니{" "}
-            <span>{items.length > 0 && <div>{items.length}</div>}</span>
+            장바구니
+            <span className="item">
+              {items.length > 0 && <div>{items.length}</div>}
+            </span>
           </div>
-          <div className="table1">
+          <div>
             <div>
               <div>
                 <input
@@ -158,52 +161,79 @@ const Cart = () => {
               <div>주문금액</div>
               <div>배송 정보</div>
             </div>
-            <div> </div>
           </div>
         </div>
-        {items.length > 0 &&
-          items.map((item) => (
-            <div key={item.name}>
-              <div>
-                <input
-                  type="checkbox"
-                  name={`select-${item.id}`}
-                  onChange={(e) => handleSingleCheck(e.target.checked, item.id)}
-                  checked={!!checkItems.includes(item.id)}
-                />
-                <img src={item.photo} alt="상품 사진" />
-                <div>{item.name}</div>
-                <button onClick={() => deleteHandler(item.name)} type="button">
-                  x
-                </button>
+        <div className="item">
+          {items.length > 0 &&
+            items.map((item) => (
+              <div key={item.name}>
+                <div>
+                  <div>
+                    <input
+                      type="checkbox"
+                      name={`select-${item.id}`}
+                      onChange={(e) =>
+                        handleSingleCheck(e.target.checked, item.id)
+                      }
+                      checked={!!checkItems.includes(item.id)}
+                      style={{
+                        margin: `0 10px`,
+                        width: "20px",
+                        height: "20px",
+                      }}
+                    />
+                    <img
+                      src={item.photo}
+                      alt="상품 사진"
+                      style={{
+                        width: "80px",
+                        height: "80px",
+                        border: "1px solid gray",
+                        marginRight: "10px",
+                      }}
+                    />
+                    <div>{item.name}</div>
+                  </div>
+                  <button
+                    onClick={() => deleteHandler(item.name)}
+                    type="button"
+                  >
+                    <ImCancelCircle />
+                  </button>
+                </div>
+                <div>
+                  <div>{item.number}</div>
+                  <button type="button" onClick={() => onModalHandler(item.id)}>
+                    옵션/수량 변경
+                  </button>
+                  {modalVisibleId === item.id && (
+                    <ModalComponent
+                      item={item}
+                      id={item.id}
+                      modalVisibleId={modalVisibleId}
+                      setModalVisibleId={setModalVisibleId}
+                      open={modalVisibleId}
+                      onClose={() => {
+                        setModalVisibleId("");
+                      }}
+                      getNumEqual={getNumEqual}
+                    />
+                  )}
+                </div>
+                <div>
+                  <div>{item.price * item.number}</div>
+                  <button type="button">
+                    {!localStorage.token && <Link to="/login">바로구매</Link>}
+                    {!!localStorage.token && (
+                      <Link to="/payment">바로구매</Link>
+                    )}
+                  </button>
+                </div>
               </div>
-              <div>
-                <div>{item.number}</div>
-                <button type="button" onClick={() => onModalHandler(item.id)}>
-                  옵션/수량 변경
-                </button>
-                {modalVisibleId === item.id && (
-                  <ModalComponent
-                    item={item}
-                    id={item.id}
-                    modalVisibleId={modalVisibleId}
-                    setModalVisibleId={setModalVisibleId}
-                    open={modalVisibleId}
-                    onClose={() => {
-                      setModalVisibleId("");
-                    }}
-                    getNumEqual={getNumEqual}
-                  />
-                )}
-              </div>
-              <div>
-                <div>{item.price * item.number}</div>
-                <button type="button">바로구매</button>
-              </div>
-            </div>
-          ))}
-        {sumItems > 50000 ? <FreeDelivery /> : <Delivery />}
-        {items.length === 0 && <div>장바구니가 비어있습니다.</div>}
+            ))}
+          {sumItems > 50000 ? <FreeDelivery /> : <Delivery />}
+          {items.length === 0 && <div>장바구니가 비어있습니다.</div>}
+        </div>
       </div>
       {items.length > 0 && (
         <div>
@@ -244,7 +274,10 @@ const Cart = () => {
       )}
       {items.length > 0 && (
         <div>
-          <button type="button">주문하기</button>
+          <button type="button">
+            {!localStorage.token && <Link to="/login">주문하기</Link>}
+            {!!localStorage.token && <Link to="/payment">주문하기</Link>}
+          </button>
         </div>
       )}
       <div>
@@ -252,6 +285,17 @@ const Cart = () => {
           <Link to="/">계속 쇼핑하기</Link>
         </button>
       </div>
+      {!!localStorage.token && (
+        <div>
+          <div>
+            <div>위시리스트</div>
+            <button type="button">
+              <Link to="/account">더보기</Link>
+            </button>
+          </div>
+          <div>위시리스트가 없습니다.</div>
+        </div>
+      )}
     </Container>
   );
 };
