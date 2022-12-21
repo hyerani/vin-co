@@ -2,8 +2,14 @@ import { Link } from "react-router-dom";
 import { MdClose, MdMenu, MdSearch } from "react-icons/md";
 import { IoEllipsisVerticalOutline } from "react-icons/io5";
 import { BsChevronDown } from "react-icons/bs";
-import { useContext } from "react";
-import { CloseBtn, Container, StyledAside, StyledHeader } from "./styles";
+import { useContext, useEffect, useState } from "react";
+import {
+  CloseBtn,
+  Container,
+  StyledAside,
+  StyledHeader,
+  Search,
+} from "./styles";
 import { useToggle } from "../../hooks/useToggle";
 import { instance } from "../../api/api";
 import AuthContext from "../../context/ContextProvider";
@@ -103,8 +109,46 @@ const Header = () => {
     }
   };
 
+  // 검색 모달창
+  const [search, setSearch] = useState(false);
+  const searchToggle = () => {
+    setSearch((prev) => !prev);
+  };
+  const keyDown = (e) => {
+    if (e.keyCode === 27) {
+      searchToggle();
+    } else if (e.keyCode === 13) {
+      // 데이터전송
+      console.log("검색 GO");
+      searchToggle();
+    }
+  };
+
+  useEffect(() => {
+    if (search === true) {
+      console.log("search : ", search);
+    }
+  }, [search]);
+
   return (
     <StyledHeader>
+      {search ? (
+        <Search>
+          <button type="button" className="closeBtn" onClick={searchToggle}>
+            <MdClose />
+          </button>
+          <div className="searchBox">
+            <input type="text" placeholder="검색" onKeyDown={keyDown} />
+            <Link to="/search">
+              <button type="button" onClick={searchToggle}>
+                <MdSearch className="searchBtn" />
+              </button>
+            </Link>
+          </div>
+        </Search>
+      ) : (
+        ""
+      )}
       <Container>
         <nav className="mobile-nav">
           <button type="button" onClick={toggle}>
@@ -136,7 +180,12 @@ const Header = () => {
           {/* RIGHT NAV */}
           <ul>
             <li>
-              <button className="search-btn" type="button">
+              {/* 검색 모달창 */}
+              <button
+                onClick={searchToggle}
+                className="search-btn"
+                type="button"
+              >
                 <MdSearch />
               </button>
             </li>
