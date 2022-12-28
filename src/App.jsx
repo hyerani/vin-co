@@ -9,6 +9,7 @@ import Search from "./pages/search/Search";
 import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
 import Account from "./pages/account/Account";
+import Payment from "./pages/payment/Payment";
 import { AuthContextProvider } from "./context/ContextProvider";
 import PublicRoute from "./componets/router/PublicRoute";
 import PrivateRoute from "./componets/router/PrivateRoute";
@@ -49,7 +50,7 @@ const App = () => {
             />
             <Route path="/cart" element={<Cart />} />
           </Route>
-
+          <Route path="/payment" element={<Payment />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
