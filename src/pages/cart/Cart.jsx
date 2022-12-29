@@ -304,6 +304,7 @@ const Cart = () => {
   const checkSum = checkSumItems(checkItems);
   const checkSum1 = checkSum.toLocaleString();
   const checkSum2 = (checkSum + 2500).toLocaleString();
+  const paycheckItems = items.filter((item) => checkItems.includes(item.id));
 
   return (
     <Container>
@@ -413,6 +414,7 @@ const Cart = () => {
                       {!!localStorage.token && (
                         <Link
                           to="/payment"
+                          state={{ items: [item] }}
                           style={{ color: "white", fontWeight: "700" }}
                         >
                           바로구매
@@ -471,7 +473,11 @@ const Cart = () => {
               </Link>
             )}
             {!!localStorage.token && (
-              <Link to="/payment" style={{ color: "white" }}>
+              <Link
+                to="/payment"
+                style={{ color: "white" }}
+                state={{ items: paycheckItems }}
+              >
                 주문하기
               </Link>
             )}
