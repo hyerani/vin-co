@@ -113,6 +113,8 @@ const Payment = () => {
     (acc, item) => acc + item.price * item.number,
     0,
   );
+  const localeDelivery = delivery.toLocaleString();
+  const localeDelivery2 = (delivery + 2500).toLocaleString();
 
   const onChangeName = (event) => {
     setUserData((prev) => {
@@ -521,7 +523,7 @@ const Payment = () => {
                     }}
                   >
                     <div style={{ color: "gray" }}>상품가격</div>
-                    <div>{delivery}원</div>
+                    <div>{localeDelivery}원</div>
                   </div>
                   <div
                     style={{
@@ -545,7 +547,7 @@ const Payment = () => {
                 >
                   <div>총 주문금액</div>
                   <div style={{ fontWeight: "700" }}>
-                    {delivery < 50000 ? delivery + 2500 : delivery}원
+                    {delivery < 50000 ? localeDelivery2 : localeDelivery}원
                   </div>
                 </div>
               </div>
@@ -606,8 +608,19 @@ const Payment = () => {
               </div>
             </div>
             <div>
-              <div style={{ backgroundColor: "white", margin: "20px 0" }}>
-                <div style={{ display: "flex", alignItems: "center" }}>
+              <div
+                style={{
+                  backgroundColor: "white",
+                  margin: "20px 0",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "20px",
+                  }}
+                >
                   <input
                     type="checkbox"
                     id="ok"
@@ -627,7 +640,6 @@ const Payment = () => {
                     color: "white",
                     fontWeight: "700",
                     fontSize: "25px",
-                    margin: "20px 0 0",
                     width: "100%",
                     padding: "5px",
                   }}
