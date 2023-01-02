@@ -1,9 +1,68 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import styled from "styled-components";
 import { instance } from "../../api/api";
 import AddressModal from "./AddressModal";
 import ModalPayment from "./ModalPayment";
 import banks from "./Banks";
+
+const InputForm = styled.div`
+  margin: 10px;
+  > div {
+    padding: 5px 0;
+    line-height: 20px;
+    font-size: 12px;
+  }
+  > input {
+    padding: 10px 0;
+    &:invalid {
+      border: none;
+      outline: 1px solid red;
+    }
+    &:invalid + div {
+      display: block;
+      color: red;
+    }
+    &:valid {
+      outline: none;
+    }
+    &:valid + div {
+      display: none;
+    }
+  }
+`;
+const InputForm2 = styled.div`
+  position: relative;
+  margin: 10px;
+  > div {
+    padding: 5px 0;
+    line-height: 20px;
+    font-size: 12px;
+  }
+  > input {
+    padding: 10px 0;
+    width: 100%;
+    &:invalid {
+      border: none;
+      outline: 1px solid red;
+    }
+    &:invalid + div {
+      display: block;
+      color: red;
+    }
+    &:valid {
+      outline: none;
+    }
+    &:valid + div {
+      display: none;
+    }
+  }
+`;
+
+const ItemPrice = ({ price }) => {
+  const itemprice = price.toLocaleString();
+  return <div style={{ fontWeight: "700" }}>{itemprice}원</div>;
+};
 
 const Payment = () => {
   const [userData, setUserData] = useState({});
@@ -141,225 +200,441 @@ const Payment = () => {
   };
 
   return (
-    <div>
-      <div>결제하기</div>
-      <div>
-        <div>
-          <div>주문 상품 정보</div>
-          {items2.map((item) => (
-            <div key={item.id}>
-              <img src={item.photo} alt={item.name} />
-              <div>
-                <div>{item.name}</div>
-                <div>{item.number}</div>
-                <div>{item.price}</div>
-              </div>
+    <div style={{ backgroundColor: "lightgray" }}>
+      <div
+        style={{
+          textAlign: "center",
+          padding: "50px 0",
+          fontSize: "25px",
+        }}
+      >
+        결제하기
+      </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <div style={{ margin: "20px" }}>
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "50px",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "20px",
+                fontWeight: "700",
+                paddingBottom: "50px",
+              }}
+            >
+              주문 상품 정보
             </div>
-          ))}
-          <div>
-            {delivery < 50000 ? (
-              <div>배송비: 2,500</div>
-            ) : (
-              <div>배송비: 무료</div>
-            )}
-          </div>
-        </div>
-        <div>
-          <div>주문자 정보</div>
-          <div>
-            <div>
-              <div>
-                <input
-                  type="text"
-                  placeholder="이름"
-                  value={userData.displayName || ""}
-                  onChange={onChangeName}
-                  id="txtName"
-                  pattern="/^[가-힣]{2,4}$/"
-                />
-                <div>이름을 입력해주세요</div>
-              </div>
-              <div>
-                <input
-                  type="tel"
-                  placeholder="연락처"
-                  value={userData.tel || ""}
-                  onChange={onChangeTel}
-                  id="txtTel"
-                  maxLength="11"
-                />
-                <div>
-                  전화번호를 올바르게 입력해주세요(&quot;-&quot;는 입력하지
-                  않습니다.)
+            <div style={{ border: "1px solid gray" }}>
+              {items2.map((item) => (
+                <div
+                  key={item.id}
+                  style={{ display: "flex", borderBottom: "1px solid gray" }}
+                >
+                  <img
+                    src={item.photo}
+                    alt={item.name}
+                    style={{ width: "80px", height: "80px", padding: "10px" }}
+                  />
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      lineHeight: "20px",
+                    }}
+                  >
+                    <div>{item.name}</div>
+                    <div style={{ color: "gray", fontSize: "14px" }}>
+                      {item.number}개
+                    </div>
+                    <ItemPrice price={item.price} />
+                  </div>
                 </div>
-              </div>
-              <div>
-                <input
-                  type="text"
-                  placeholder="이메일"
-                  value={userData.email || ""}
-                  onChange={onChangeEmail}
-                  pattern="	
-                /^[a-z0-9\.\-_]+@([a-z0-9\-]+\.)+[a-z]{2,6}$/"
-                />
-                <div>이메일 주소를 올바르게 입력해주세요.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div>배송정보</div>
-          <div>
-            <div>
-              <input
-                type="checkbox"
-                id="same"
-                onChange={(e) => onSame(e.target.checked)}
-              />
-              <label htmlFor="same">주문자 정보와 동일</label>
-            </div>
-            <div>
-              <div>
-                <input
-                  type="text"
-                  placeholder="수령인"
-                  onChange={deliveryName}
-                  value={userDelivery.displayName || ""}
-                  pattern="/^[가-힣]{2,4}$/"
-                />
-                <div>수령인의 성함을 올바르게 입력해주세요.</div>
-              </div>
-              <div>
-                <input
-                  type="tel"
-                  placeholder="연락처"
-                  onChange={deliveryTel}
-                  value={userDelivery.tel || ""}
-                  maxLength="11"
-                />
-                <div>
-                  수령인의 전화번호를 올바르게 입력해주세요(&quot;-&quot;는
-                  입력하지 않습니다.)
-                </div>
-              </div>
-              <div>
-                <input
-                  type="text"
-                  placeholder="우편번호"
-                  value={writeInfo.code}
-                  onClick={() => setVisible(true)}
-                />
-                <div>배달주소를 올바르게 입력해주세요.</div>
-              </div>
-              <button type="button" onClick={() => setVisible(true)}>
-                주소찾기
-              </button>
-              <div>
-                <input
-                  type="text"
-                  placeholder="주소"
-                  value={writeInfo.address}
-                  onClick={() => setVisible(true)}
-                />
-                <div>배달주소를 올바르게 입력해주세요.</div>
-              </div>
-              {visible && (
-                <AddressModal
-                  setWriteInfo={setWriteInfo}
-                  setVisible={setVisible}
-                  handleComplete={handleComplete}
-                />
-              )}
-
-              <input type="text" placeholder="상세주소" />
-            </div>
-            <div>
-              <div>배송메모</div>
-              <select
-                onChange={(event) => {
-                  if (event.target.value === "order") {
-                    return setOrder(true);
-                  }
-                  return setOrder(false);
+              ))}
+              <div
+                style={{
+                  display: "flex",
+                  aliginItems: "center",
+                  justifyContent: "center",
+                  padding: "10px",
+                  backgroundColor: "lightgray",
                 }}
               >
-                <option>배송메모를 선택해 주세요.</option>
-                <option>배송 전에 미리 연락 바랍니다.</option>
-                <option>부재시 경비실에 맡겨주세요.</option>
-                <option>부재시 전화나 문자를 남겨주세요.</option>
-                <option value="order">직접입력 </option>
-              </select>
-              {order && (
-                <input type="text" placeholder="배송 메모를 입력해 주세요." />
-              )}
+                <div>배송비</div>
+                {delivery < 50000 ? (
+                  <div style={{ padding: "0 10px", fontWeight: "700" }}>
+                    2,500
+                  </div>
+                ) : (
+                  <div style={{ padding: "0 10px", fontWeight: "700" }}>
+                    무료
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: "20px",
+              backgroundColor: "white",
+              padding: "20px",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "20px",
+                fontWeight: "700",
+                paddingBottom: "50px",
+              }}
+            >
+              주문자 정보
+            </div>
+            <div>
+              <div>
+                <div style={{ display: "flex" }}>
+                  <InputForm>
+                    <input
+                      type="text"
+                      placeholder="이름"
+                      value={userData.displayName || ""}
+                      onChange={onChangeName}
+                      id="txtName"
+                      pattern="^[가-힣]{2,4}$"
+                      required
+                    />
+                    <div>이름을 입력해주세요</div>
+                  </InputForm>
+                  <InputForm>
+                    <input
+                      type="tel"
+                      placeholder="연락처"
+                      value={userData.tel || ""}
+                      onChange={onChangeTel}
+                      id="txtTel"
+                      pattern="^[0-9]{11}$"
+                      maxLength="11"
+                      required
+                    />
+                    <div>
+                      전화번호를 올바르게 입력해주세요
+                      <br />
+                      (&quot;-&quot;는 입력하지 않습니다.)
+                    </div>
+                  </InputForm>
+                </div>
+                <InputForm>
+                  <input
+                    type="text"
+                    placeholder="이메일"
+                    value={userData.email || ""}
+                    onChange={onChangeEmail}
+                    pattern="^[0-9a-zA-Z]+@[0-9a-zA-Z]+\.[a-z]{2,4}$"
+                    required
+                  />
+                  <div>이메일 주소를 올바르게 입력해주세요.</div>
+                </InputForm>
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: "20px",
+              backgroundColor: "white",
+              padding: "20px",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "20px",
+                fontWeight: "700",
+                paddingBottom: "50px",
+              }}
+            >
+              배송정보
+            </div>
+            <div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "20px",
+                }}
+              >
+                <input
+                  type="checkbox"
+                  id="same"
+                  onChange={(e) => onSame(e.target.checked)}
+                  style={{ width: "20px", height: "20px" }}
+                />
+                <label htmlFor="same">주문자 정보와 동일</label>
+              </div>
+              <div>
+                <div style={{ display: "flex" }}>
+                  <InputForm>
+                    <input
+                      type="text"
+                      placeholder="수령인"
+                      onChange={deliveryName}
+                      value={userDelivery.displayName || ""}
+                      pattern="^[가-힣]{2,4}$"
+                      required
+                    />
+                    <div>수령인의 성함을 올바르게 입력해주세요.</div>
+                  </InputForm>
+                  <InputForm>
+                    <input
+                      type="tel"
+                      placeholder="연락처"
+                      onChange={deliveryTel}
+                      value={userDelivery.tel || ""}
+                      maxLength="11"
+                      pattern="^[0-9]{11}$"
+                      required
+                    />
+                    <div>
+                      수령인의 전화번호를 올바르게 입력해주세요
+                      <br />
+                      (&quot;-&quot;는 입력하지 않습니다.)
+                    </div>
+                  </InputForm>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <InputForm>
+                    <input
+                      type="text"
+                      placeholder="우편번호"
+                      value={writeInfo.code}
+                      onClick={() => setVisible(true)}
+                      required
+                    />
+                    <div>배달주소를 올바르게 입력해주세요.</div>
+                  </InputForm>
+                  <button
+                    type="button"
+                    onClick={() => setVisible(true)}
+                    style={{
+                      border: "1px solid black",
+                      padding: "10px",
+                      backgroundColor: "lightgray",
+                    }}
+                  >
+                    주소찾기
+                  </button>
+                </div>
+                <InputForm2>
+                  <input
+                    type="text"
+                    placeholder="주소"
+                    value={writeInfo.address}
+                    onClick={() => setVisible(true)}
+                    required
+                  />
+                  <div>배달주소를 올바르게 입력해주세요.</div>
+                </InputForm2>
+                {visible && (
+                  <AddressModal
+                    setWriteInfo={setWriteInfo}
+                    setVisible={setVisible}
+                    handleComplete={handleComplete}
+                  />
+                )}
+                <div style={{ margin: "10px" }}>
+                  <input
+                    type="text"
+                    placeholder="상세주소"
+                    style={{ width: "100%", padding: "10px 0" }}
+                  />
+                </div>
+              </div>
+              <div style={{ margin: "20px 10px" }}>
+                <div style={{ margin: "20px 0 10px", fontWeight: "700" }}>
+                  배송메모
+                </div>
+                <select
+                  onChange={(event) => {
+                    if (event.target.value === "order") {
+                      return setOrder(true);
+                    }
+                    return setOrder(false);
+                  }}
+                  style={{ padding: "10px", width: "100%" }}
+                >
+                  <option>배송메모를 선택해 주세요.</option>
+                  <option>배송 전에 미리 연락 바랍니다.</option>
+                  <option>부재시 경비실에 맡겨주세요.</option>
+                  <option>부재시 전화나 문자를 남겨주세요.</option>
+                  <option value="order">직접입력 </option>
+                </select>
+                {order && (
+                  <input type="text" placeholder="배송 메모를 입력해 주세요." />
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div>
-        <div>
-          <div>주문요약</div>
+        <div
+          style={{
+            marginTop: "20px",
+            position: "sticky",
+            top: "50px",
+            height: "fit-content",
+          }}
+        >
           <div>
-            <div>
-              <div>
-                <div>상품가격</div>
-                <div>{delivery}</div>
+            <div
+              style={{
+                backgroundColor: "white",
+                marginBottom: "20px",
+                padding: "20px",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "700",
+                  marginBottom: "20px",
+                }}
+              >
+                주문요약
               </div>
               <div>
-                <div>배송비</div>
-                {delivery < 50000 ? <div>2,500</div> : <div>무료</div>}
+                <div style={{ borderBottom: "1px solid gray" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      margin: "10px 0",
+                    }}
+                  >
+                    <div style={{ color: "gray" }}>상품가격</div>
+                    <div>{delivery}원</div>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      margin: "10px 0",
+                    }}
+                  >
+                    <div style={{ color: "gray" }}>배송비</div>
+                    {delivery < 50000 ? <div>2,500</div> : <div>무료</div>}
+                  </div>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    margin: "20px 0 10px",
+                  }}
+                >
+                  <div>총 주문금액</div>
+                  <div style={{ fontWeight: "700" }}>
+                    {delivery < 50000 ? delivery + 2500 : delivery}원
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style={{ backgroundColor: "white", padding: "20px" }}>
+              <div
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "700",
+                  marginBottom: "20px",
+                }}
+              >
+                결제수단
+              </div>
+              <div
+                style={{ display: "flex", flexWrap: "wrap", width: "260px" }}
+              >
+                {banks.map((bank) => (
+                  <div
+                    key={bank.code}
+                    style={{
+                      border: "1px solid lightgray",
+                      width: "80px",
+                      height: "80px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => openModalPayment(bank.code)}
+                    >
+                      <img
+                        src={bank.src}
+                        alt={bank.name}
+                        style={{ width: "40px", height: "40px" }}
+                      />
+                      <div>{bank.name}</div>
+                    </button>
+                    {modalPaymentId === bank.code && (
+                      <ModalPayment
+                        bank={bank}
+                        items={items2}
+                        closeModalPayment={closeModalPayment}
+                        loading={loading}
+                        setLoading={setLoading}
+                        accountInfo={accountInfo}
+                        setAccountInfo={setAccountInfo}
+                        accountLink={accountLink}
+                        setAccountLink={setAccountLink}
+                        account={account}
+                        setAccount={setAccount}
+                      />
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
             <div>
-              <div>총 주문금액</div>
-              <div>{delivery < 50000 ? delivery + 2500 : delivery}</div>
-            </div>
-          </div>
-          <div>
-            <div>결제수단</div>
-            {banks.map((bank) => (
-              <div key={bank.code}>
+              <div style={{ backgroundColor: "white", margin: "20px 0" }}>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <input
+                    type="checkbox"
+                    id="ok"
+                    onChange={(event) => {
+                      setBuyIt(event.target.checked);
+                    }}
+                    value={buyIt}
+                    style={{ width: "20px", height: "20px" }}
+                  />
+                  <label htmlFor="ok">구매조건 확인 및 결제진행에 동의</label>
+                </div>
                 <button
                   type="button"
-                  onClick={() => openModalPayment(bank.code)}
-                >
-                  <img src={bank.src} alt={bank.name} />
-                  <div>{bank.name}</div>
-                </button>
-                {modalPaymentId === bank.code && (
-                  <ModalPayment
-                    bank={bank}
-                    items={items2}
-                    closeModalPayment={closeModalPayment}
-                    loading={loading}
-                    setLoading={setLoading}
-                    accountInfo={accountInfo}
-                    setAccountInfo={setAccountInfo}
-                    accountLink={accountLink}
-                    setAccountLink={setAccountLink}
-                    account={account}
-                    setAccount={setAccount}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-          <div>
-            <div>
-              <div>
-                <input
-                  type="checkbox"
-                  id="ok"
-                  onChange={(event) => {
-                    setBuyIt(event.target.checked);
+                  onClick={setClose}
+                  style={{
+                    backgroundColor: "blue",
+                    color: "white",
+                    fontWeight: "700",
+                    fontSize: "25px",
+                    margin: "20px 0 0",
+                    width: "100%",
+                    padding: "5px",
                   }}
-                  value={buyIt}
-                />
-                <label htmlFor="ok">구매조건 확인 및 결제진행에 동의</label>
+                >
+                  결제하기
+                </button>
               </div>
-              <button type="button" onClick={setClose}>
-                결제하기
-              </button>
             </div>
           </div>
         </div>
